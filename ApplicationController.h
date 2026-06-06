@@ -1,6 +1,6 @@
 //
 //  ApplicationController.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.
@@ -16,7 +16,6 @@
 	IBOutlet TargetController *targetController;
 	IBOutlet ConfigsController *configsController;
 	
-	IBOutlet NSDrawer *drawer;
 	IBOutlet NSWindow *mainWindow;
 	IBOutlet NSToolbarItem* activeButton;
 	IBOutlet NSMenuItem* activeMenuItem;

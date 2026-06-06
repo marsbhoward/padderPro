@@ -1,6 +1,6 @@
 //
 //  JSActionButton.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 5/05/09.
 //

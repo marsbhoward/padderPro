@@ -1,6 +1,6 @@
 //
 //  TargetConfig.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 6/05/09.
 //

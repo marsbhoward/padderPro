@@ -1,6 +1,6 @@
 //
 //  TargetMouseBtn.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Yifeng Huang on 7/27/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  ConfigsController.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //
@@ -8,6 +8,28 @@
 @implementation ConfigsController
 
 @synthesize configs;
+
+-(void) awakeFromNib {
+    // Add Save button next to the existing + and − buttons in the configs panel
+    NSView *buttonBar = [removeButton superview];
+    NSButton *saveBtn = [[NSButton alloc] initWithFrame:NSMakeRect(104, 4, 75, 28)];
+    [saveBtn setTitle:@"Save"];
+    [saveBtn setBezelStyle:NSBezelStyleSmallSquare];
+    [saveBtn setTarget:self];
+    [saveBtn setAction:@selector(savePressed:)];
+    [buttonBar addSubview:saveBtn];
+    [saveBtn release];
+}
+
+-(IBAction) savePressed:(id)sender {
+    [self save];
+    // Brief visual feedback
+    NSAlert *alert = [[NSAlert alloc] init];
+    [alert setMessageText:@"Configurations saved."];
+    [alert addButtonWithTitle:@"OK"];
+    [alert runModal];
+    [alert release];
+}
 
 -(id) init {
 	if(self = [super init]) {
@@ -29,17 +51,17 @@
 		neutralConfig = NULL;
 		return;
 	}
-	[self activateConfig: neutralConfig forApplication: NULL];
+	[self activateConfig: neutralConfig forPid: 0];
 }
 
--(void) activateConfig: (Config*)config forApplication: (ProcessSerialNumber*) psn {
+-(void) activateConfig: (Config*)config forPid: (pid_t)pid {
 	if(currentConfig == config)
 		return;
 
-	if(psn) {
+	if(pid != 0) {
 		if(!neutralConfig)
 			neutralConfig = currentConfig;
-		attachedApplication = *psn;
+		attachedApplicationPid = pid;
 	} else {
 		neutralConfig = NULL;
 	}
@@ -106,7 +128,7 @@
 }
 
 -(void)tableViewSelectionDidChange:(NSNotification*) notify {
-	[self activateConfig: (Config*)[configs objectAtIndex:[tableView selectedRow]] forApplication: NULL];
+	[self activateConfig: (Config*)[configs objectAtIndex:[tableView selectedRow]] forPid: 0];
 }
 	
 -(id) tableView: (NSTableView*)view objectValueForTableColumn: (NSTableColumn*) column row: (int) index {
@@ -177,7 +199,7 @@
         }
         
         // Load old configurations from NSUserDefaults
-        NSLog(@"Loading configurations from NSUserDefaults (Enjoy2 1.1)\n");
+        NSLog(@"Loading configurations from NSUserDefaults (PadderPro 1.1)\n");
         [self ver11LoadConfigsFrom: old_configs];
     }
     else {
@@ -188,7 +210,7 @@
         [appController configsListChanged];
         Config *mapping = [self mappingWithName:selected_mapping_name];
         if (mapping != nil) {
-            [self activateConfig:mapping forApplication: NULL];
+            [self activateConfig:mapping forPid: 0];
         }
         else {
             NSLog(@"Selected mapping not found: %@\n", selected_mapping_name);
@@ -222,7 +244,7 @@
         Config *mapping = [new_mappings objectAtIndex:ix];
         
         NSData *json_data = [NSData dataWithContentsOfURL:url];
-        [mapping loadFromJSON:json_data withConfigList:configs];
+        [mapping loadFromJSON:json_data withConfigList:new_mappings];
         
         ix++;
     }
@@ -231,11 +253,11 @@
 	currentConfig = NULL;
 }
 
--(void) applicationSwitchedTo: (NSString*) name withPsn: (ProcessSerialNumber) psn {
+-(void) applicationSwitchedTo: (NSString*) name withPid: (pid_t)pid {
 	for(int i=0; i<[configs count]; i++) {
 		Config* cfg = [configs objectAtIndex:i];
 		if([[cfg name] isEqualToString: name]) {
-			[self activateConfig: cfg forApplication: &psn];
+			[self activateConfig: cfg forPid: pid];
 			return;
 		}
 	}
@@ -251,7 +273,7 @@
     NSURL *u = [urls objectAtIndex:0];
     
     //NSString *bundle_name = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-    NSString *bundle_name = @"Enjoy2";
+    NSString *bundle_name = @"PadderPro";
     NSURL *as_dir = [u URLByAppendingPathComponent:bundle_name isDirectory:true];
     NSURL *mappings_dir = [as_dir URLByAppendingPathComponent:@"mappings"];
     
@@ -269,7 +291,7 @@
 }
 
 -(NSURL*) getMappingFilenameFor:(Config *)config {
-    // Returns ".../Application Support/Enjoy2/mappings/[mapping].json"
+    // Returns ".../Application Support/PadderPro/mappings/[mapping].json"
     NSURL *mappings_dir = [self getMappingsDirectory];
     NSString *filename = [[config name] stringByAppendingString:@".json"];
     NSURL *full_filename = [mappings_dir URLByAppendingPathComponent:filename];
@@ -277,15 +299,15 @@
     return full_filename;
 }
 
--(ProcessSerialNumber*) targetApplication {
+-(pid_t) targetApplicationPid {
 	if(neutralConfig)
-		return &attachedApplication;
-	return NULL;
+		return attachedApplicationPid;
+	return 0;
 }
 
 
 ///////////////////////////////////////
-// Legacy loading code from Enjoy2 v1.1
+// Legacy loading code from PadderPro 1.1
 
 -(void) ver11LoadConfigsFrom: (NSDictionary*) envelope{
 	if(envelope == NULL)
@@ -315,7 +337,7 @@
 	[appController configsListChanged];
 	
 	int index = [[envelope objectForKey: @"selectedIndex"] intValue];
-	[self activateConfig: [configs objectAtIndex:index] forApplication: NULL];
+	[self activateConfig: [configs objectAtIndex:index] forPid: 0];
 }
 
 @end

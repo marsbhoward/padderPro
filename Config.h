@@ -1,6 +1,6 @@
 //
 //  Config.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.
@@ -19,6 +19,8 @@
 
 -(void) setTarget:(Target*)target forAction:(id)jsa;
 -(Target*) getTargetForAction: (id) jsa;
+-(void) setSecondaryTarget:(Target*)target forAction:(id)jsa;
+-(Target*) getSecondaryTargetForAction:(id)jsa;
 
 -(void) saveJSONTo: (NSURL*)filename;
 // Load only the name from the JSON file (for loading 1st pass)

@@ -9,26 +9,26 @@
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.tunah.${PRODUCT_NAME:identifier}</string>
+	<string>com.padderpro.${PRODUCT_NAME:identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>${PRODUCT_NAME}</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
+<key>CFBundleShortVersionString</key>
 	<string>1.2.1</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2014 Yifeng Huang</string>
-	<key>SUPublicDSAKeyFile</key>
-	<string>dsa_pub.pem</string>
-	<key>SUFeedURL</key>
-	<string>https://s3.amazonaws.com/nongraphical/enjoy2/Enjoy2Appcast.xml</string>
+	<string>Copyright (c) 2024 PadderPro</string>
+	<key>NSHumanInterfaceDeviceUsageDescription</key>
+	<string>PadderPro needs access to your game controllers and joysticks to map their inputs to keyboard and mouse actions.</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>PadderPro uses Apple Events to detect the active application for per-app controller mappings.</string>
 </dict>
 </plist>

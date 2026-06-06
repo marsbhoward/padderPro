@@ -1,6 +1,6 @@
 //
 //  TargetMouseBtn.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Yifeng Huang on 7/27/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -24,6 +24,7 @@
 }
 
 -(void) trigger: (JoystickController *)jc {
+    pid_t pid = [[[NSWorkspace sharedWorkspace] frontmostApplication] processIdentifier];
     NSRect screenRect = [[NSScreen mainScreen] frame];
     NSInteger height = screenRect.size.height;
     NSPoint mouseLoc = [NSEvent mouseLocation];
@@ -32,11 +33,12 @@
                                                eventType,
                                                CGPointMake(mouseLoc.x, height - mouseLoc.y),
                                                which);
-    CGEventPost(kCGHIDEventTap, click);
+    CGEventPostToPid(pid, click);
     CFRelease(click);
 }
 
 -(void) untrigger: (JoystickController *)jc {
+    pid_t pid = [[[NSWorkspace sharedWorkspace] frontmostApplication] processIdentifier];
     NSRect screenRect = [[NSScreen mainScreen] frame];
     NSInteger height = screenRect.size.height;
     NSPoint mouseLoc = [NSEvent mouseLocation];
@@ -45,7 +47,7 @@
                                                eventType,
                                                CGPointMake(mouseLoc.x, height - mouseLoc.y),
                                                which);
-    CGEventPost(kCGHIDEventTap, click);
+    CGEventPostToPid(pid, click);
     CFRelease(click);
 }
 

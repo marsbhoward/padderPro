@@ -1,6 +1,6 @@
 //
 //  JoystickController.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //
@@ -21,13 +21,13 @@
 	return self;
 }
 
--(void) finalize {
+-(void) dealloc {
 	for(int i=0; i<[joysticks count]; i++) {
 		[[joysticks objectAtIndex:i] invalidate];
 	}
 	IOHIDManagerClose(hidManager, kIOHIDOptionsTypeNone);
 	CFRelease(hidManager);
-	[super finalize];
+	[super dealloc];
 }
 
 static NSMutableDictionary* create_criterion( UInt32 inUsagePage, UInt32 inUsage )
@@ -60,6 +60,36 @@ void timer_callback(CFRunLoopTimerRef timer, void *ctx) {
     }
 }
 
+-(void) applyTarget:(id)target forSubaction:(id)subaction mainAction:(id)mainAction value:(IOHIDValueRef)value {
+    if (!target)
+        return;
+    if ([target running] != [subaction active]) {
+        if ([subaction active]) {
+            [target trigger: self];
+        } else {
+            [target untrigger: self];
+        }
+        [target setRunning: [subaction active]];
+    }
+
+    if ([mainAction isKindOfClass: [JSActionAnalog class]]) {
+        double realValue = [(JSActionAnalog*)mainAction getRealValue: IOHIDValueGetIntegerValue(value)];
+        [target setInputValue: realValue];
+    } else if ([mainAction isKindOfClass: [JSActionStick class]]) {
+        NSUInteger idx = [[mainAction subActions] indexOfObject:subaction];
+        if (idx != NSNotFound) {
+            double analogVal = [(JSActionStick *)mainAction analogValueForSubActionIndex:idx];
+            [target setInputValue: analogVal];
+        }
+    }
+    // Add any continuous target (including stick subactions) to the update loop
+    if ([target isContinuous] && [target running]) {
+        if (!objInArray([self runningTargets], target)) {
+            [[self runningTargets] addObject: target];
+        }
+    }
+}
+
 void input_callback(void* inContext, IOReturn inResult, void* inSender, IOHIDValueRef value) {
 	JoystickController* self = (JoystickController*)inContext;
 	IOHIDDeviceRef device = (IOHIDDeviceRef) inSender;
@@ -69,8 +99,17 @@ void input_callback(void* inContext, IOReturn inResult, void* inSender, IOHIDVal
 	if([app_controller active]) {
 		// for reals
 		JSAction* mainAction = [js actionForEvent: value];
-		if(!mainAction)
+		if(!mainAction) {
+            IOHIDElementRef elt = IOHIDValueGetElement(value);
+            NSLog(@"[PadderPro] No action for: usagePage=0x%X usage=0x%X cookie=%u logicalVal=%d logMin=%d logMax=%d",
+                  (unsigned)IOHIDElementGetUsagePage(elt),
+                  (unsigned)IOHIDElementGetUsage(elt),
+                  (unsigned)IOHIDElementGetCookie(elt),
+                  (int)IOHIDValueGetIntegerValue(value),
+                  (int)IOHIDElementGetLogicalMin(elt),
+                  (int)IOHIDElementGetLogicalMax(elt));
 			return;
+        }
 		
 		[mainAction notifyEvent: value];
 		NSArray* subactions = [mainAction subActions];
@@ -78,37 +117,27 @@ void input_callback(void* inContext, IOReturn inResult, void* inSender, IOHIDVal
 			subactions = [NSArray arrayWithObject:mainAction];
 		for(id subaction in subactions) {
 			Target* target = [[self->configsController currentConfig] getTargetForAction:subaction];
-			if(!target)
+			Target* secondary = [[self->configsController currentConfig] getSecondaryTargetForAction:subaction];
+			if(!target && !secondary)
 				continue;
 			/* target application? doesn't seem to be any need since we are only active when it's in front */
-			/* might be required for some strange actions */
-            if ([target running] != [subaction active]) {
-                if ([subaction active]) {
-                    [target trigger: self];
-                }
-                else {
-                    [target untrigger: self];
-                }
-                [target setRunning: [subaction active]];
-            }
-            
-            if ([mainAction isKindOfClass: [JSActionAnalog class]]) {
-                double realValue = [(JSActionAnalog*)mainAction getRealValue: IOHIDValueGetIntegerValue(value)];
-                [target setInputValue: realValue];
-            
-                // Add to list of running targets
-                if ([target isContinuous] && [target running]) {
-                    if (!objInArray([self runningTargets], target)) {
-                        [[self runningTargets] addObject: target];
-                    }
-                }
-            }
+			[self applyTarget:target forSubaction:subaction mainAction:mainAction value:value];
+			[self applyTarget:secondary forSubaction:subaction mainAction:mainAction value:value];
 		}
 	} else if([[NSApplication sharedApplication] isActive] && [[[NSApplication sharedApplication]mainWindow]isVisible]) {
 		// joysticks not active, use it to select stuff
 		id handler = [js handlerForEvent: value];
-		if(!handler)
+		if(!handler) {
+            IOHIDElementRef elt = IOHIDValueGetElement(value);
+            NSLog(@"[PadderPro] No handler for: usagePage=0x%X usage=0x%X cookie=%u logicalVal=%d logMin=%d logMax=%d",
+                  (unsigned)IOHIDElementGetUsagePage(elt),
+                  (unsigned)IOHIDElementGetUsage(elt),
+                  (unsigned)IOHIDElementGetCookie(elt),
+                  (int)IOHIDValueGetIntegerValue(value),
+                  (int)IOHIDElementGetLogicalMin(elt),
+                  (int)IOHIDElementGetLogicalMax(elt));
 			return;
+        }
 	
 		[self expandRecursive: handler];
 		self->programmaticallySelecting = YES;
@@ -169,6 +198,7 @@ void remove_callback(void* inContext, IOReturn inResult, void* inSender, IOHIDDe
 }
 
 -(void) setup {
+    [outlineView setBackgroundColor:[NSColor controlBackgroundColor]];
     hidManager = IOHIDManagerCreate( kCFAllocatorDefault, kIOHIDOptionsTypeNone);
 	NSArray *criteria = [NSArray arrayWithObjects: 
 		 create_criterion(kHIDPage_GenericDesktop, kHIDUsage_GD_Joystick),
@@ -251,12 +281,21 @@ void remove_callback(void* inContext, IOReturn inResult, void* inSender, IOHIDDe
 	return [item name];
 }
 
+- (void)outlineView:(NSOutlineView *)ov willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)col item:(id)item {
+    if ([cell respondsToSelector:@selector(setTextColor:)]) {
+        [cell setTextColor:[NSColor labelColor]];
+    }
+}
+
 - (void)outlineViewSelectionDidChange: (NSNotification*) notification {
 	[targetController reset];
 	selectedAction = [self determineSelectedAction];
 	[targetController load];
-	if(programmaticallySelecting)
-		[targetController focusKey];
+	if (programmaticallySelecting) {
+		Target *existing = [[configsController currentConfig] getTargetForAction:selectedAction];
+		if (!existing)
+			[targetController focusKey];
+	}
 	programmaticallySelecting = NO;
 }
 	

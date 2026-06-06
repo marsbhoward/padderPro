@@ -1,10 +1,11 @@
 //
 //  ApplicationController.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //
-#include <Carbon/Carbon.h>
+
+#import <ApplicationServices/ApplicationServices.h>
 
 @implementation ApplicationController
 
@@ -12,27 +13,43 @@
 
 static BOOL active;
 
-pascal OSStatus appSwitch(EventHandlerCallRef handlerChain, EventRef event, void* userData);
-
 void onUncaughtException(NSException *exception) {
     NSLog(@"Uncaught exception: %@", exception.description);
+}
+
+static void sigtermHandler(int sig) {
+    // Save configs then let the default handler terminate
+    [[[[NSApplication sharedApplication] delegate] configsController] save];
+    signal(SIGTERM, SIG_DFL);
+    raise(SIGTERM);
 }
 
 -(void) applicationDidFinishLaunching: (NSNotification*) notification {
     // Debug: print exceptions
     NSSetUncaughtExceptionHandler(&onUncaughtException);
-    
+    signal(SIGTERM, sigtermHandler);
+
+    // Prompt for Accessibility permission (required to synthesize keyboard/mouse events)
+    NSDictionary *axOpts = @{(__bridge id)kAXTrustedCheckOptionPrompt: @YES};
+    BOOL trusted = AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)axOpts);
+    NSLog(@"[PadderPro] Accessibility trusted: %d", trusted);
+
 	[jsController setup];
-	[drawer open];
 	[targetController setEnabled: false];
 	[self setActive: NO];
 	[configsController load];
-    
-	EventTypeSpec et;
-	et.eventClass = kEventClassApplication;
-	et.eventKind = kEventAppFrontSwitched;
-	EventHandlerUPP handler = NewEventHandlerUPP(appSwitch);
-	InstallApplicationEventHandler(handler, 1, &et, self, NULL);
+
+    [[[NSWorkspace sharedWorkspace] notificationCenter]
+        addObserver:self
+        selector:@selector(activeApplicationChanged:)
+        name:NSWorkspaceDidActivateApplicationNotification
+        object:nil];
+}
+
+-(void) activeApplicationChanged:(NSNotification *)notification {
+    NSRunningApplication *app = [notification.userInfo objectForKey:NSWorkspaceApplicationKey];
+    pid_t pid = app.processIdentifier;
+    [configsController applicationSwitchedTo:app.localizedName withPid:pid];
 }
 
 -(void) awakeFromNib {
@@ -52,15 +69,6 @@ void onUncaughtException(NSException *exception) {
 	return YES;
 }
 
-pascal OSStatus appSwitch(EventHandlerCallRef handlerChain, EventRef event, void* userData) {
-	ApplicationController* self = (ApplicationController*)userData;
-	NSDictionary* currentApp = [[NSWorkspace sharedWorkspace] activeApplication];
-	ProcessSerialNumber psn;
-	psn.lowLongOfPSN = [[currentApp objectForKey:@"NSApplicationProcessSerialNumberLow"] longValue];
-	psn.highLongOfPSN = [[currentApp objectForKey:@"NSApplicationProcessSerialNumberHigh"] longValue];
-	[self->configsController applicationSwitchedTo: [currentApp objectForKey:@"NSApplicationName"] withPsn: psn];
-	return noErr;
-}
 
 -(BOOL) active {
 	return active;
@@ -99,6 +107,6 @@ pascal OSStatus appSwitch(EventHandlerCallRef handlerChain, EventRef event, void
 }
 
 -(void) chooseConfig: (id) sender {
-	[configsController activateConfig: [[configsController configs] objectAtIndex: ([dockMenuBase indexOfItem: sender]-2)] forApplication: NULL];
+	[configsController activateConfig: [[configsController configs] objectAtIndex: ([dockMenuBase indexOfItem: sender]-2)] forPid: 0];
 }
 @end

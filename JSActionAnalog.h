@@ -1,6 +1,6 @@
 //
 //  JSActionAnalog.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 5/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.
@@ -11,9 +11,9 @@
 
 @interface JSActionAnalog : JSAction {
 	double min, max;
-    
     double discreteThreshold;
     double analogThreshold;
+    BOOL   isTrigger;
 }
 
 @property(readwrite) double min;
@@ -21,7 +21,8 @@
 @property(readwrite) double discreteThreshold;
 @property(readwrite) double analogThreshold;
 
-- (id) initWithIndex: (int)newIndex;
--(double) getRealValue: (int) value;
+- (id) initWithIndex:(int)newIndex usage:(int)usage;
+- (id) initAsTriggerWithIndex:(int)newIndex;
+- (double) getRealValue:(int)value;
 
 @end

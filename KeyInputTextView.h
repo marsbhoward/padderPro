@@ -1,28 +1,28 @@
 //
 //  KeyInputTextField.h
-//  Enjoy
-//
-//  Created by Sam McCall on 5/05/09.
-//  Copyright 2009 University of Otago. All rights reserved.
+//  PadderPro
 //
 
 #import <Cocoa/Cocoa.h>
+#import "KeyboardPickerWindowController.h"
 @class TargetController;
 
-@interface KeyInputTextView: NSTextView {
-	IBOutlet NSWindow* window;
-	IBOutlet TargetController* targetController;
-	BOOL hasKey;
-	int vk;
-	NSString* descr;
-	BOOL enabled;
+@interface KeyInputTextView : NSTextView <KeyboardPickerDelegate> {
+    IBOutlet NSWindow         *window;
+    IBOutlet TargetController *targetController;
+    BOOL     hasKey;
+    NSArray  *vkCodes;
+    NSString *descr;
+    BOOL     enabled;
+    KeyboardPickerWindowController *picker;
 }
 
-@property(readonly) BOOL hasKey;
-@property(readwrite) int vk;
-@property(readonly) NSString* descr;
-@property(readwrite) BOOL enabled;
+@property(readonly) BOOL    hasKey;
+@property(readonly) NSArray *vkCodes;
+@property(readonly) NSString *descr;
+@property(readwrite) BOOL   enabled;
 
--(void) clear;
+- (void) clear;
+- (void) setVkCodes:(NSArray *)codes descr:(NSString *)d;
 
 @end

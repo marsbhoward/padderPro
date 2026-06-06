@@ -1,6 +1,6 @@
 //
 //  Joystick.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.

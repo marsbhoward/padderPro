@@ -1,6 +1,6 @@
 //
 //  TargetConfig.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 6/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.

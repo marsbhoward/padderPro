@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'Enjoy' target in the 'Enjoy' project
+// Prefix header for all source files of the 'PadderPro' target in the 'PadderPro' project
 //
 
 #ifdef __OBJC__
@@ -15,6 +15,7 @@
 #import "JoystickController.h"
 #import "JSAction.h"
 #import "JSActionAnalog.h"
+#import "JSActionStick.h"
 #import "JSActionButton.h"
 #import "JSActionHat.h"
 #import "KeyInputTextView.h"

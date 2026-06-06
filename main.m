@@ -1,6 +1,6 @@
 //
 //  main.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //

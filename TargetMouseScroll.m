@@ -1,6 +1,6 @@
 //
 //  TargetMouseScroll.m
-//  Enjoy
+//  PadderPro
 //
 //  Created by Yifeng Huang on 7/28/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
@@ -24,11 +24,12 @@
 }
 
 -(void) trigger: (JoystickController *)jc {
+    pid_t pid = [[[NSWorkspace sharedWorkspace] frontmostApplication] processIdentifier];
     CGEventRef scroll = CGEventCreateScrollWheelEvent(NULL,
                                                       kCGScrollEventUnitLine,
                                                       1,
                                                       [self howMuch]);
-    CGEventPost(kCGHIDEventTap, scroll);
+    CGEventPostToPid(pid, scroll);
     CFRelease(scroll);
 }
 

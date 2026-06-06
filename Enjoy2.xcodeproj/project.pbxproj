@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA000001000000000000AA01 /* JSActionStick.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000AA00 /* JSActionStick.m */; };
+		AA000002000000000000BB01 /* KeyboardPickerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB00 /* KeyboardPickerWindowController.m */; };
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8B0C55251709F78F0086F30B /* TranslationWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B0C55231709F78F0086F30B /* TranslationWindow.xib */; };
 		8B0C5528170A07900086F30B /* dualshock.png in Resources */ = {isa = PBXBuildFile; fileRef = 8B0C5527170A07900086F30B /* dualshock.png */; };
-		8B4B9DE31A2BFD2A0074ADC6 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4B9DE21A2BFD2A0074ADC6 /* Sparkle.framework */; };
 		8B4B9DE61A2BFF6B0074ADC6 /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 8B4B9DE51A2BFF6B0074ADC6 /* dsa_pub.pem */; };
-		8B4B9DE81A2C015A0074ADC6 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8B4B9DE21A2BFD2A0074ADC6 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B7E22D91707EF6100DBA438 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 8B7E22D81707EF6100DBA438 /* README.md */; };
 		8B7E22E01707FD0900DBA438 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B7E22DD1707FD0900DBA438 /* JSONKit.m */; };
 		8B7E476C15C314A200C588FA /* TargetMouseBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B7E476B15C314A200C588FA /* TargetMouseBtn.m */; };
@@ -33,7 +33,6 @@
 		D5617FD90FAFD1E600928B3A /* TargetKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = D5617FD80FAFD1E600928B3A /* TargetKeyboard.m */; };
 		D5617FE40FAFD7B000928B3A /* TargetController.m in Sources */ = {isa = PBXBuildFile; fileRef = D5617FE30FAFD7B000928B3A /* TargetController.m */; };
 		D5617FE70FAFDB5800928B3A /* KeyInputTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5617FE60FAFDB5800928B3A /* KeyInputTextView.m */; };
-		D561800A0FAFE8E400928B3A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D56180090FAFE8E400928B3A /* Carbon.framework */; };
 		D594BE860FAE6219007A85F2 /* Joystick.m in Sources */ = {isa = PBXBuildFile; fileRef = D594BE850FAE6219007A85F2 /* Joystick.m */; };
 		D594BE8A0FAE64AD007A85F2 /* JSAction.m in Sources */ = {isa = PBXBuildFile; fileRef = D594BE890FAE64AD007A85F2 /* JSAction.m */; };
 		D594BEF90FAE6FF2007A85F2 /* JoystickController.m in Sources */ = {isa = PBXBuildFile; fileRef = D594BEF80FAE6FF2007A85F2 /* JoystickController.m */; };
@@ -50,7 +49,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8B4B9DE81A2C015A0074ADC6 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,10 +62,9 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		32CA4F630368D1EE00C91783 /* Enjoy2_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enjoy2_Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* PadderPro_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PadderPro_Prefix.pch; sourceTree = "<group>"; };
 		8B0C55241709F78F0086F30B /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/TranslationWindow.xib; sourceTree = "<group>"; };
 		8B0C5527170A07900086F30B /* dualshock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dualshock.png; sourceTree = "<group>"; };
-		8B4B9DE21A2BFD2A0074ADC6 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		8B4B9DE51A2BFF6B0074ADC6 /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8B7E22D81707EF6100DBA438 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		8B7E22DC1707FD0900DBA438 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
@@ -80,8 +77,12 @@
 		8BEFAD9B15C46BFF00823AEC /* TargetMouseScroll.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetMouseScroll.m; sourceTree = "<group>"; };
 		8BEFAD9E15C476DC00823AEC /* TargetToggleMouseScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetToggleMouseScope.h; sourceTree = "<group>"; };
 		8BEFAD9F15C476DC00823AEC /* TargetToggleMouseScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetToggleMouseScope.m; sourceTree = "<group>"; };
+		AA000001000000000000AA00 /* JSActionStick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSActionStick.m; sourceTree = "<group>"; };
+		AA000001000000000000AAFF /* JSActionStick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSActionStick.h; sourceTree = "<group>"; };
+		AA000002000000000000BB00 /* KeyboardPickerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardPickerWindowController.m; sourceTree = "<group>"; };
+		AA000002000000000000BBFF /* KeyboardPickerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardPickerWindowController.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Enjoy2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Enjoy2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* PadderPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PadderPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D549CA4B0FBB441B00BC8203 /* Credits.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		D5617A080FAEAF8300928B3A /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		D5617A340FAEB74000928B3A /* ConfigsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigsController.h; sourceTree = "<group>"; };
@@ -104,7 +105,6 @@
 		D5617FE30FAFD7B000928B3A /* TargetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetController.m; sourceTree = "<group>"; };
 		D5617FE50FAFDB5800928B3A /* KeyInputTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyInputTextView.h; sourceTree = "<group>"; };
 		D5617FE60FAFDB5800928B3A /* KeyInputTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyInputTextView.m; sourceTree = "<group>"; };
-		D56180090FAFE8E400928B3A /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		D594BE840FAE6219007A85F2 /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		D594BE850FAE6219007A85F2 /* Joystick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Joystick.m; sourceTree = "<group>"; };
 		D594BE880FAE64AD007A85F2 /* JSAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSAction.h; sourceTree = "<group>"; };
@@ -125,8 +125,6 @@
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				D594BF000FAE7397007A85F2 /* IOKit.framework in Frameworks */,
-				D561800A0FAFE8E400928B3A /* Carbon.framework in Frameworks */,
-				8B4B9DE31A2BFD2A0074ADC6 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +137,8 @@
 				8B7E22DA1707FD0900DBA438 /* JSONKit */,
 				D5617D290FAF579A00928B3A /* JSActionAnalog.h */,
 				D5617D2A0FAF579A00928B3A /* JSActionAnalog.m */,
+				AA000001000000000000AAFF /* JSActionStick.h */,
+				AA000001000000000000AA00 /* JSActionStick.m */,
 				D594BE840FAE6219007A85F2 /* Joystick.h */,
 				D594BE850FAE6219007A85F2 /* Joystick.m */,
 				D594BE880FAE64AD007A85F2 /* JSAction.h */,
@@ -167,6 +167,8 @@
 				D5617FE30FAFD7B000928B3A /* TargetController.m */,
 				D5617FE50FAFDB5800928B3A /* KeyInputTextView.h */,
 				D5617FE60FAFDB5800928B3A /* KeyInputTextView.m */,
+				AA000002000000000000BBFF /* KeyboardPickerWindowController.h */,
+				AA000002000000000000BB00 /* KeyboardPickerWindowController.m */,
 				8BD9B54115C230FE00929C5D /* TargetMouseMove.h */,
 				8BD9B54215C230FE00929C5D /* TargetMouseMove.m */,
 				8B7E476A15C314A200C588FA /* TargetMouseBtn.h */,
@@ -191,7 +193,6 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D56180090FAFE8E400928B3A /* Carbon.framework */,
 				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
 				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
 				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
@@ -202,12 +203,12 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Enjoy2.app */,
+				8D1107320486CEB800E47090 /* PadderPro.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* Enjoy */ = {
+		29B97314FDCFA39411CA2CEA /* PadderPro */ = {
 			isa = PBXGroup;
 			children = (
 				8B7E22D81707EF6100DBA438 /* README.md */,
@@ -217,13 +218,13 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
-			name = Enjoy;
+			name = PadderPro;
 			sourceTree = "<group>";
 		};
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* Enjoy2_Prefix.pch */,
+				32CA4F630368D1EE00C91783 /* PadderPro_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -247,7 +248,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8B4B9DE21A2BFD2A0074ADC6 /* Sparkle.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -274,23 +274,22 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* Enjoy2 */ = {
+		8D1107260486CEB800E47090 /* PadderPro */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Enjoy2" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "PadderPro" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
-				8B4B9DE71A2C01450074ADC6 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Enjoy2;
+			name = PadderPro;
 			productInstallPath = "$(HOME)/Applications";
-			productName = Enjoy;
-			productReference = 8D1107320486CEB800E47090 /* Enjoy2.app */;
+			productName = PadderPro;
+			productReference = 8D1107320486CEB800E47090 /* PadderPro.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -299,9 +298,9 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 1600;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Enjoy2" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "PadderPro" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -311,11 +310,11 @@
 				French,
 				German,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* Enjoy */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* PadderPro */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* Enjoy2 */,
+				8D1107260486CEB800E47090 /* PadderPro */,
 			);
 		};
 /* End PBXProject section */
@@ -353,17 +352,18 @@
 				D5617D1A0FAF568100928B3A /* JSActionButton.m in Sources */,
 				D5617D260FAF579300928B3A /* JSActionHat.m in Sources */,
 				D5617D2B0FAF579A00928B3A /* JSActionAnalog.m in Sources */,
+				AA000001000000000000AA01 /* JSActionStick.m in Sources */,
 				D5617DF20FAF636C00928B3A /* SubAction.m in Sources */,
 				D5617FD60FAFD06000928B3A /* Target.m in Sources */,
 				D5617FD90FAFD1E600928B3A /* TargetKeyboard.m in Sources */,
 				D5617FE40FAFD7B000928B3A /* TargetController.m in Sources */,
 				D5617FE70FAFDB5800928B3A /* KeyInputTextView.m in Sources */,
+				AA000002000000000000BB01 /* KeyboardPickerWindowController.m in Sources */,
 				D5F809710FB093400006A4DE /* TargetConfig.m in Sources */,
 				8BD9B54315C230FF00929C5D /* TargetMouseMove.m in Sources */,
 				8B7E476C15C314A200C588FA /* TargetMouseBtn.m in Sources */,
 				8BEFAD9C15C46BFF00823AEC /* TargetMouseScroll.m in Sources */,
 				8BEFADA015C476DC00823AEC /* TargetToggleMouseScope.m in Sources */,
-				8B7E22E01707FD0900DBA438 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,22 +401,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PadderPro.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Frameworks\"",
-					"$(PROJECT_DIR)",
-				);
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Enjoy2_Prefix.pch;
+				GCC_PREFIX_HEADER = PadderPro_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = Enjoy2;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_NAME = PadderPro;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -425,19 +421,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_ENTITLEMENTS = PadderPro.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Frameworks\"",
-					"$(PROJECT_DIR)",
-				);
-				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Enjoy2_Prefix.pch;
+				GCC_PREFIX_HEADER = PadderPro_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = Enjoy2;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_NAME = PadderPro;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -449,10 +442,9 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
-				SDKROOT = "";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -462,16 +454,15 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PREBINDING = NO;
-				SDKROOT = "";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Enjoy2" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "PadderPro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -480,7 +471,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Enjoy2" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "PadderPro" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

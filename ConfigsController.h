@@ -1,6 +1,6 @@
 //
 //  ConfigsController.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.
@@ -19,13 +19,14 @@
     
 	Config* currentConfig;
 	Config* neutralConfig; /* last config to be manually selected */
-	ProcessSerialNumber attachedApplication;
-    
+	pid_t attachedApplicationPid;
+
 }
 
 -(IBAction) addPressed: (id)sender;
 -(IBAction) removePressed: (id)sender;
--(void) activateConfig: (Config*)config forApplication: (ProcessSerialNumber*) psn;
+-(IBAction) savePressed: (id)sender;
+-(void) activateConfig: (Config*)config forPid: (pid_t)pid;
 -(Config*) mappingWithName: (NSString*)name;
 
 -(void) loadAllFromDir: (NSURL*)dir;
@@ -33,17 +34,17 @@
 @property(readonly) Config* currentConfig;
 @property(readonly) Config* currentNeutralConfig;
 @property(readonly) NSArray* configs;
-@property(readonly) ProcessSerialNumber* targetApplication;
+@property(readonly) pid_t targetApplicationPid;
 -(void) save;
 -(void) load;
 
--(void) applicationSwitchedTo: (NSString*) name withPsn: (ProcessSerialNumber) psn;
+-(void) applicationSwitchedTo: (NSString*) name withPid: (pid_t)pid;
 
 -(NSURL*) getMappingsDirectory;
 -(void) makeMappingsDirectory;
 -(NSURL*) getMappingFilenameFor: (Config*) config;
 
-// Legacy loading code from Enjoy2 v1.1
+// Legacy loading code from PadderPro 1.1
 -(void) ver11LoadConfigsFrom: (NSDictionary*) dict;
 
 @end

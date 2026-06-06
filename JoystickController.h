@@ -1,6 +1,6 @@
 //
 //  JoystickController.h
-//  Enjoy
+//  PadderPro
 //
 //  Created by Sam McCall on 4/05/09.
 //  Copyright 2009 University of Otago. All rights reserved.
@@ -30,6 +30,7 @@
 
 -(void) setup;
 -(Joystick*) findJoystickByRef: (IOHIDDeviceRef) device;
+-(void) applyTarget:(id)target forSubaction:(id)subaction mainAction:(id)mainAction value:(IOHIDValueRef)value;
 
 @property(readonly) id selectedAction;
 @property(readonly) NSMutableArray *joysticks;

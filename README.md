@@ -1,70 +1,109 @@
-Enjoy2
-======
+PadderPro
+=========
 
-Enjoy2 is a simple program for OSX that allows you to transform joystick inputs into keyboard or mouse events.
+PadderPro is a macOS application that transforms game controller (joystick/gamepad) inputs into keyboard and mouse events.
 
-If you've ever played a video game which only supports mouse and keyboard input, but you want to use a joystick or gamepad, then Enjoy2 is the program for you. Enjoy2 lets you map your joystick inputs to:
+If you've ever played a game that only supports mouse and keyboard but you'd rather use a controller, PadderPro lets you map controller inputs to:
 
-* Key events
-* Mouse clicks
-* Mouse movement (for analog sticks)
+* Key presses (including multi-key combinations)
+* Mouse clicks (left, right, middle, back, forward)
+* Mouse movement — vertical and horizontal, with proportional (analog) cursor speed
 * Scrolling
+* Switching between configurations on-the-fly
 
-Enjoy2 supports multiple configurations (for different games or programs) and you can even map joystick buttons to change configurations on-the-fly.
+PadderPro supports multiple configurations (one per game or program) and can map a controller button to switch between them.
 
-Enjoy2 is written by [@nongraphical](http://nongraphical.com) and is based on [Enjoy by Sam McCall](https://yukkurigames.com/enjoyable/). Enjoy2 is MIT-licensed.
+PadderPro is built on top of [Enjoyable 2 (Enjoy2) by @nongraphical](http://nongraphical.com), which is itself based on [Enjoyable by Sam McCall](https://yukkurigames.com/enjoyable/). It modernizes that codebase for current macOS releases and adds controller-trigger detection, separate dual-stick handling, analog cursor speed, and concurrent key + mouse mappings.
 
-## How to install
+## Features
 
-[Download Enjoy2](http://nongraphical.s3-website-us-east-1.amazonaws.com/releases/Enjoy2.zip), extract the archive, and you're done!
+* **Controllers** — USB or Bluetooth gamepads, joysticks, and multi-axis controllers
+* **Triggers** — analog triggers (e.g. LT/RT) are detected and usable as buttons
+* **Dual sticks** — left and right sticks are detected separately (Stick 1 / Stick 2) with Up / Down / Left / Right sub-actions
+* **Analog mouse movement** — cursor speed scales with how far the stick is pushed, plus a 1–10 sensitivity slider
+* **Concurrent mapping** — the "Also press key" option fires a key press at the same time as the primary action (e.g. move the cursor *and* hold a key from one stick direction)
+* **Persistent configs** — mappings are saved to disk and restored on launch; a **Save** button lets you save on demand, and configs are also saved automatically on quit
+
+## Building and running
+
+PadderPro builds with Xcode. Because of how macOS ties permissions to an app's code signature (see [Permissions](#permissions)), the project ships with a helper script that builds, signs with a stable local certificate, and launches the app:
+
+```bash
+cd <path-to-repo>
+./build_run.sh
+```
+
+Alternatively, open the project in Xcode and run it:
+
+```bash
+open <path-to-repo>/Enjoy2.xcodeproj
+```
+
+Then press **⌘R** to build and run.
+
+> Note: a plain Xcode build is ad-hoc signed, whose signature hash changes on every build. macOS treats each rebuild as a new app and drops previously-granted permissions. `build_run.sh` re-signs each build with a stable local certificate so permissions persist. Use it for day-to-day development.
+
+## Permissions
+
+PadderPro needs two macOS privacy permissions, both granted in **System Settings → Privacy & Security**:
+
+* **Input Monitoring** — to read controller input
+* **Accessibility** — to synthesize keyboard and mouse events
+
+On first launch you'll be prompted to grant these. Approve them, then quit and relaunch PadderPro so the grants take effect.
 
 ## How to use
 
-At startup, and when Enjoy2 is paused, press any button or move any analog stick to jump to the configuration for that button or stick. From there, select one of the mapping options from the choices on the right.
+1. Launch PadderPro and connect a controller.
+2. While PadderPro is paused (not active), press a button or move a stick to jump to that input's mapping. The input appears selected in the left panel.
+3. Choose a mapping option on the right:
+   * **Press a key** — opens the keyboard picker; choose one or more keys
+   * **Mouse movement vertical** — Up / Down
+   * **Mouse movement horizontal** — Left / Right
+   * **Mouse button** — Left / Right click
+   * **Mouse scroll** — Up / Down
+   * **Toggle mouse scope** — switches between global and single-window mouse modes
+   * **Switch to configuration** — activates another configuration
+4. (Optional) Check **Also press key** to fire a key press concurrently with the selected action, and pick the key.
+5. (Optional) Adjust the **Speed** slider to set the cursor sensitivity for mouse-movement mappings.
+6. Click **Save**, then press **Start** to activate. Switch to your target app and use the controller.
 
-To use an analog axis to move the mouse, select the "Analog" sub-item on the left.
+### Mouse scope modes
 
-### Terminology
+PadderPro offers two mouse-movement scopes: global and single-window. It starts in global mode; map any controller button to the **Toggle mouse scope** action to switch between them at runtime.
 
-A **mapping** specifies which keys/mouse buttons/mouse movements happen when a joystick button is pressed or axis moved. A **translation** specifies which hardware joystick buttons and axes translate into which virtual buttons and axes.
+## Configuration files
 
-### Mapping modes
+All configuration files (mappings and translations) are stored in the user's Application Support directory:
 
-Enjoy2 offers two mouse mapping modes: global and single-window. Enjoy2 starts in global mode, but you can set any joystick button to the "toggle mouse scope" action, which will change the mode. If you are using Enjoy2 to play a video game, you may find that one or the other mode offers better compatibility with your game's specific requirements.
+    ~/Library/Application Support/PadderPro/
 
-### Translations (upcoming feature)
-
-**Translations** allow you to specify a mapping (e.g. for playing a specific video game) once and apply it to a variety of similar controllers. For example, you could create a mapping and use it with PS3 controllers and Logitech PC gamepads.
-
-TODO: upcoming feature.
-
-## Transferring configuration files
-
-All the Enjoy2 configuration files (mappings and translations) are stored in the user's Application Support directory:
-
-    /Users/$USERNAME/Library/Application Support/Enjoy2/*
-
-The files are JSON-encoded and should be portable across machines.
+The files are JSON-encoded and portable across machines.
 
 ## Requirements
 
-* Mac OS X 10.6 (Snow Leopard) or higher
-* USB gamepad/joystick/controller
+* macOS 13.0 (Ventura) or later
+* A USB or Bluetooth gamepad / joystick / controller
 
 ## Changelog
 
-Version 1.2
+### Version 1.2
 
-* JSON configuration files
+* Rebranded to PadderPro
+* Updated for current macOS (incl. macOS Tahoe) compatibility
+* Replaced the Carbon framework with modern NSWorkspace APIs
+* Replaced JSONKit with NSJSONSerialization
+* Added analog-trigger detection (usable as buttons)
+* Separate left/right stick handling with directional sub-actions
+* Mouse movement split into independent vertical and horizontal mappings
+* Proportional (analog) cursor speed based on stick deflection, plus a sensitivity slider
+* Concurrent "Also press key" mapping alongside any primary action
+* Explicit **Save** button and on-quit autosave
+* Stable local code signing so privacy permissions persist across rebuilds
 
-Version 1.1
+### Version 1.1 (Enjoy2)
 
-* Forked from Enjoy
 * Mouse movement support
 * Mouse button support
 * Scrollwheel support
-* Support for two mouse movement modes
-
-## Acknowledgements
-
-* JSONKit: [https://github.com/johnezang/JSONKit](https://github.com/johnezang/JSONKit)
+* Two mouse movement modes
