@@ -82,6 +82,16 @@
     return -1.0 + 2.0 * (value - min - 0.5) / (max - min);
 }
 
-@synthesize min, max, discreteThreshold, analogThreshold;
+// Combo member: only triggers qualify. Held = "Pressed" sub-action active.
+// The "Pressed" sub-action carries the per-config target, so it's what we suppress.
+- (BOOL) isHeld {
+    if (!isTrigger) return NO;
+    return [[subActions objectAtIndex:0] active];
+}
+- (NSArray*) suppressibleSubactions {
+    return isTrigger ? subActions : @[];
+}
+
+@synthesize min, max, discreteThreshold, analogThreshold, isTrigger;
 
 @end

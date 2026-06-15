@@ -24,4 +24,9 @@
 	return NO;
 }
 
+// Default: not a valid combo member.
+-(BOOL) isHeld { return NO; }
+-(NSArray*) suppressibleSubactions { return @[self]; }
+-(NSString*) comboToken { return [NSString stringWithFormat:@"%d", (int)(intptr_t)cookie]; }
+
 @end

@@ -66,7 +66,7 @@ static KD kArrows[] = {
 
 - (instancetype)init {
     NSPanel *panel = [[NSPanel alloc]
-        initWithContentRect:NSMakeRect(0,0,700,510)
+        initWithContentRect:NSMakeRect(0,0,900,510)
         styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskNonactivatingPanel
         backing:NSBackingStoreBuffered
         defer:NO];
@@ -93,7 +93,7 @@ static KD kArrows[] = {
     // Instruction label at top
     NSTextField *hint = [NSTextField labelWithString:
         @"Click to toggle keys. Multiple keys fire in order when the input activates."];
-    hint.frame = NSMakeRect(mx, 480, 680, 20);
+    hint.frame = NSMakeRect(mx, 480, 880, 20);
     hint.font = [NSFont systemFontOfSize:11];
     hint.textColor = [NSColor secondaryLabelColor];
     [cv addSubview:hint];
@@ -105,6 +105,26 @@ static KD kArrows[] = {
         [self buildRow:rows[r] atY:rowY unitW:unitW keyH:keyH inView:cv leftMargin:mx];
         rowY += keyH + rowGap;
     }
+
+    // Numeric keypad block (right side). Keypad keys have distinct keycodes from the
+    // main number row, so they're separate buttons.
+    float npX = 700.0;
+    KD np1[] = {{0x52,"Num 0",2},{0x41,"Num .",2},{0,NULL,0}};
+    KD np2[] = {{0x53,"Num 1",1},{0x54,"Num 2",1},{0x55,"Num 3",1},{0x4C,"Enter",1},{0,NULL,0}};
+    KD np3[] = {{0x56,"Num 4",1},{0x57,"Num 5",1},{0x58,"Num 6",1},{0x51,"=",1},{0,NULL,0}};
+    KD np4[] = {{0x59,"Num 7",1},{0x5B,"Num 8",1},{0x5C,"Num 9",1},{0x45,"+",1},{0,NULL,0}};
+    KD np5[] = {{0x47,"Clear",1},{0x4B,"/",1},{0x43,"*",1},{0x4E,"-",1},{0,NULL,0}};
+    KD *npRows[] = {np1, np2, np3, np4, np5};
+    float npY = 10.0;
+    for (int r = 0; r < 5; r++) {
+        [self buildRow:npRows[r] atY:npY unitW:unitW keyH:keyH inView:cv leftMargin:npX];
+        npY += keyH + rowGap;
+    }
+    NSTextField *npLbl = [NSTextField labelWithString:@"Numeric Keypad"];
+    npLbl.frame = NSMakeRect(npX, npY + 2, 200, 16);
+    npLbl.font = [NSFont systemFontOfSize:10];
+    npLbl.textColor = [NSColor secondaryLabelColor];
+    [cv addSubview:npLbl];
 
     // Mouse buttons section label
     NSTextField *mouseLbl = [NSTextField labelWithString:@"Mouse Buttons"];
@@ -128,7 +148,7 @@ static KD kArrows[] = {
 
     // Selection summary label
     _selLabel = [NSTextField labelWithString:@"No keys selected"];
-    _selLabel.frame = NSMakeRect(mx, rowY + 6, 510, 22);
+    _selLabel.frame = NSMakeRect(mx, rowY + 6, 600, 22);
     _selLabel.font = [NSFont systemFontOfSize:13];
     _selLabel.textColor = [NSColor labelColor];
     [cv addSubview:_selLabel];
@@ -136,13 +156,13 @@ static KD kArrows[] = {
     // Clear button
     NSButton *clearBtn = [NSButton buttonWithTitle:@"Clear"
         target:self action:@selector(clearPressed:)];
-    clearBtn.frame = NSMakeRect(530, rowY + 4, 70, 26);
+    clearBtn.frame = NSMakeRect(720, rowY + 4, 70, 26);
     [cv addSubview:clearBtn];
 
     // Done button
     NSButton *doneBtn = [NSButton buttonWithTitle:@"Done"
         target:self action:@selector(donePressed:)];
-    doneBtn.frame = NSMakeRect(610, rowY + 4, 80, 26);
+    doneBtn.frame = NSMakeRect(800, rowY + 4, 80, 26);
     doneBtn.keyEquivalent = @"\r";
     [cv addSubview:doneBtn];
 }

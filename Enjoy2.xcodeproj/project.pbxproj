@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AA000001000000000000AA01 /* JSActionStick.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000001000000000000AA00 /* JSActionStick.m */; };
+		AA000002000000000000AA01 /* JSActionCombo.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000AA00 /* JSActionCombo.m */; };
+		AA000003000000000000AA01 /* JSGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000003000000000000AA00 /* JSGroup.m */; };
 		AA000002000000000000BB01 /* KeyboardPickerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000002000000000000BB00 /* KeyboardPickerWindowController.m */; };
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		8B0C55251709F78F0086F30B /* TranslationWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B0C55231709F78F0086F30B /* TranslationWindow.xib */; };
@@ -79,6 +81,10 @@
 		8BEFAD9F15C476DC00823AEC /* TargetToggleMouseScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetToggleMouseScope.m; sourceTree = "<group>"; };
 		AA000001000000000000AA00 /* JSActionStick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSActionStick.m; sourceTree = "<group>"; };
 		AA000001000000000000AAFF /* JSActionStick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSActionStick.h; sourceTree = "<group>"; };
+		AA000002000000000000AA00 /* JSActionCombo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSActionCombo.m; sourceTree = "<group>"; };
+		AA000002000000000000AAFF /* JSActionCombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSActionCombo.h; sourceTree = "<group>"; };
+		AA000003000000000000AA00 /* JSGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSGroup.m; sourceTree = "<group>"; };
+		AA000003000000000000AAFF /* JSGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSGroup.h; sourceTree = "<group>"; };
 		AA000002000000000000BB00 /* KeyboardPickerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardPickerWindowController.m; sourceTree = "<group>"; };
 		AA000002000000000000BBFF /* KeyboardPickerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardPickerWindowController.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -139,6 +145,10 @@
 				D5617D2A0FAF579A00928B3A /* JSActionAnalog.m */,
 				AA000001000000000000AAFF /* JSActionStick.h */,
 				AA000001000000000000AA00 /* JSActionStick.m */,
+				AA000002000000000000AAFF /* JSActionCombo.h */,
+				AA000002000000000000AA00 /* JSActionCombo.m */,
+				AA000003000000000000AAFF /* JSGroup.h */,
+				AA000003000000000000AA00 /* JSGroup.m */,
 				D594BE840FAE6219007A85F2 /* Joystick.h */,
 				D594BE850FAE6219007A85F2 /* Joystick.m */,
 				D594BE880FAE64AD007A85F2 /* JSAction.h */,
@@ -353,6 +363,8 @@
 				D5617D260FAF579300928B3A /* JSActionHat.m in Sources */,
 				D5617D2B0FAF579A00928B3A /* JSActionAnalog.m in Sources */,
 				AA000001000000000000AA01 /* JSActionStick.m in Sources */,
+				AA000002000000000000AA01 /* JSActionCombo.m in Sources */,
+				AA000003000000000000AA01 /* JSGroup.m in Sources */,
 				D5617DF20FAF636C00928B3A /* SubAction.m in Sources */,
 				D5617FD60FAFD06000928B3A /* Target.m in Sources */,
 				D5617FD90FAFD1E600928B3A /* TargetKeyboard.m in Sources */,

@@ -8,12 +8,55 @@
 @implementation Joystick
 
 
-@synthesize	vendorId, productId, productName, name, index, device, children;
+@synthesize	vendorId, productId, productName, name, index, device, children, combos;
+
+// Friendly labels for a standard Xbox-style controller. `number` is the 1-based
+// index shown in the UI (e.g. "Button 1"). Returns nil to keep the default name.
+static NSString* friendlyButtonName(int number) {
+    switch (number) {
+        case 1:  return @"A Button";
+        case 2:  return @"B Button";
+        case 4:  return @"X Button";
+        case 5:  return @"Y Button";
+        case 7:  return @"LB Button";
+        case 8:  return @"RB Button";
+        case 11: return @"Select Button";
+        case 12: return @"Start Button";
+        case 13: return @"Xbox Button";
+        case 14: return @"L3 Button";
+        case 15: return @"R3 Button";
+        case 16: return @"Share Button";
+        default: return nil;
+    }
+}
+static NSString* friendlyTriggerName(int number) {
+    switch (number) {
+        case 1:  return @"Left Trigger";
+        case 2:  return @"Right Trigger";
+        default: return nil;
+    }
+}
+static NSString* friendlyStickName(int number) {
+    switch (number) {
+        case 1:  return @"Left Stick";
+        case 2:  return @"Right Stick";
+        default: return nil;
+    }
+}
+// Xbox HID reports 16 button slots but only 12 are wired; 3/6/9/10 are padding
+// with no physical button — hide them from the UI.
+static BOOL isUnusedButtonNumber(int number) {
+    switch (number) {
+        case 3: case 6: case 9: case 10: return YES;
+        default: return NO;
+    }
+}
 
 -(id)initWithDevice: (IOHIDDeviceRef) newDevice {
 	if(self=[super init]) {
 		children = [[NSMutableArray alloc]init];
-		
+		combos   = [[NSMutableArray alloc]init];
+
 		device = newDevice;
 		productName = (NSString*)IOHIDDeviceGetProperty( device, CFSTR(kIOHIDProductKey) );
 		vendorId = [(NSNumber*)IOHIDDeviceGetProperty(device, CFSTR(kIOHIDVendorIDKey)) intValue];
@@ -77,7 +120,12 @@
             [action setBase:self];
             [action setUsage:usage];
             [action setCookie:IOHIDElementGetCookie(element)];
-            [children addObject:action];
+            int number = [action index] + 1;
+            NSString *bn = friendlyButtonName(number);
+            if (bn) [action setName:bn];
+            // Skip unused padding buttons (keeps numbering intact for the rest)
+            if (!isUnusedButtonNumber(number))
+                [children addObject:action];
         } else if (usage == 0x39 && usagePage == kHIDPage_GenericDesktop) {
             JSActionHat *action = [[JSActionHat alloc] init];
             [action setBase:self];
@@ -114,6 +162,8 @@
                 [action setMin:(double)logMin];
                 [action setCookie:IOHIDElementGetCookie(element)];
                 [action setBase:self];
+                NSString *tn = friendlyTriggerName([action index] + 1);
+                if (tn) [action setName:tn];
                 [triggerActions addObject:action];
             } else {
                 [stickAxisData addObject:@{
@@ -132,7 +182,9 @@
         NSDictionary *xd = stickAxisData[i];
         NSDictionary *yd = stickAxisData[i + 1];
         BOOL rotated = NO;
-        NSString *stickName = [[NSString alloc] initWithFormat:@"Stick %d", stickIndex + 1];
+        NSString *stickName = friendlyStickName(stickIndex + 1);
+        if (!stickName)
+            stickName = [[NSString alloc] initWithFormat:@"Stick %d", stickIndex + 1];
 
         JSActionStick *stick = [[JSActionStick alloc]
             initWithIndex:stickIndex
@@ -163,6 +215,154 @@
     // Add trigger actions (already created above)
     for (JSActionAnalog *t in triggerActions)
         [children addObject:t];
+
+    // Recreate any user-defined combos saved for this controller
+    [self loadCombos];
+}
+
+// ---- Combos -------------------------------------------------------------
+
+-(NSString*) comboDefaultsKey {
+    return [NSString stringWithFormat:@"combos~%d~%d", vendorId, productId];
+}
+
+// A valid combo member is a button or a trigger (JSActionAnalog), matched by cookie.
+-(JSAction*) comboMemberWithCookie:(void*)cookie {
+    for (JSAction *action in children)
+        if (action.cookie == cookie &&
+            ([action isKindOfClass:[JSActionButton class]] ||
+             [action isKindOfClass:[JSActionAnalog class]]))
+            return action;
+    return nil;
+}
+
+// Resolve a persisted member token: "cookie" → button/trigger;
+// "cookie.index" → the hat's direction sub-action.
+-(id) comboMemberForToken:(NSString*)token {
+    NSRange dot = [token rangeOfString:@"."];
+    if (dot.location != NSNotFound) {
+        int cookie = [[token substringToIndex:dot.location] intValue];
+        int idx    = [[token substringFromIndex:dot.location + 1] intValue];
+        for (JSAction *action in children) {
+            if ([action isKindOfClass:[JSActionHat class]] &&
+                action.cookie == (void*)(intptr_t)cookie) {
+                NSArray *subs = [action subActions];
+                if (idx >= 0 && idx < (int)[subs count])
+                    return [subs objectAtIndex:idx];
+            }
+        }
+        return nil;
+    }
+    return [self comboMemberWithCookie:(void*)(intptr_t)[token intValue]];
+}
+
+-(JSActionCombo*) addComboWithMembers:(NSArray*)members {
+    if ([members count] < 2)
+        return nil;
+    JSActionCombo *combo = [[JSActionCombo alloc] initWithMembers:members base:self];
+    // Avoid duplicates (same member set → same stringify)
+    for (JSActionCombo *existing in combos)
+        if ([[existing stringify] isEqualToString:[combo stringify]])
+            return existing;
+    [combos addObject:combo];
+    [self rebuildCombosTree];
+    [self saveCombos];
+    return combo;
+}
+
+-(void) removeCombo:(JSActionCombo*)combo {
+    [combos removeObject:combo];
+    [self rebuildCombosTree];
+    [self saveCombos];
+}
+
+// Group combos under a "Combos" node, with Left/Right/Dual Trigger subgroups for
+// combos that involve triggers. Subgroups only appear when non-empty.
+-(void) rebuildCombosTree {
+    if (!combosRoot)
+        combosRoot = [JSGroup groupNamed:@"Combos"];
+    [[combosRoot children] removeAllObjects];
+
+    JSGroup *left = [JSGroup groupNamed:@"Left Trigger"];
+    JSGroup *right = [JSGroup groupNamed:@"Right Trigger"];
+    JSGroup *dual = [JSGroup groupNamed:@"Dual Trigger"];
+    NSMutableArray *ungrouped = [NSMutableArray array]; // no trigger → top level
+
+    for (JSActionCombo *combo in combos) {
+        BOOL hasL = [combo containsTriggerIndex:0];
+        BOOL hasR = [combo containsTriggerIndex:1];
+        if (hasL && hasR)      [[dual children] addObject:combo];
+        else if (hasL)         [[left children] addObject:combo];
+        else if (hasR)         [[right children] addObject:combo];
+        else                   [ungrouped addObject:combo];
+    }
+
+    // Sort each bucket alphabetically by name (names lead with the trigger, so this
+    // orders by what follows it, e.g. "... + L3 Button" before "... + X Button").
+    NSComparator byName = ^NSComparisonResult(id a, id b) {
+        return [[a name] localizedCaseInsensitiveCompare:[b name]];
+    };
+    [ungrouped sortUsingComparator:byName];
+    [[left children] sortUsingComparator:byName];
+    [[right children] sortUsingComparator:byName];
+    [[dual children] sortUsingComparator:byName];
+
+    [[combosRoot children] addObjectsFromArray:ungrouped];
+    for (JSGroup *g in @[left, right, dual])
+        if ([[g children] count] > 0)
+            [[combosRoot children] addObject:g];
+
+    // Cache the set of sub-actions that belong to any combo.
+    NSMutableSet *m = [NSMutableSet set];
+    for (JSActionCombo *c in combos)
+        [m addObjectsFromArray:[c suppressedSubactions]];
+    comboMemberSubs = [m copy];
+}
+
+-(BOOL) isComboMemberSubaction:(id)sub {
+    return [comboMemberSubs containsObject:sub];
+}
+
+-(BOOL) subactionClaimedByActiveCombo:(id)sub {
+    for (JSActionCombo *c in combos)
+        if ([c wasActive] && [[c suppressedSubactions] containsObject:sub])
+            return YES;
+    return NO;
+}
+
+-(JSGroup*) combosRoot { return combosRoot; }
+
+-(NSArray*) outlineChildren {
+    if ([combos count] == 0)
+        return children;
+    return [children arrayByAddingObject:combosRoot];
+}
+
+-(void) saveCombos {
+    // Persist each combo as an array of its member tokens (strings).
+    NSMutableArray *defs = [NSMutableArray array];
+    for (JSActionCombo *combo in combos)
+        [defs addObject:[combo memberTokens]];
+    [[NSUserDefaults standardUserDefaults] setObject:defs forKey:[self comboDefaultsKey]];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+-(void) loadCombos {
+    NSArray *defs = [[NSUserDefaults standardUserDefaults] objectForKey:[self comboDefaultsKey]];
+    for (NSArray *tokens in defs) {
+        NSMutableArray *memberActions = [NSMutableArray array];
+        for (id tok in tokens) {
+            // Accept both new string tokens and legacy NSNumber cookies.
+            NSString *token = [tok isKindOfClass:[NSString class]] ? tok : [tok stringValue];
+            id m = [self comboMemberForToken:token];
+            if (m) [memberActions addObject:m];
+        }
+        if ([memberActions count] >= 2) {
+            JSActionCombo *combo = [[JSActionCombo alloc] initWithMembers:memberActions base:self];
+            [combos addObject:combo];
+        }
+    }
+    [self rebuildCombosTree];
 }
 
 - (JSAction*) findActionByCookie: (void*) cookie {

@@ -22,4 +22,12 @@
 	return [[NSString alloc] initWithFormat: @"%@~%d", [base stringify], index];
 }
 
+// Combo member: held when this direction is active; it carries its own target.
+-(BOOL) isHeld { return active; }
+-(NSArray*) suppressibleSubactions { return @[self]; }
+// Identify a hat direction by its hat's cookie plus the direction index.
+-(NSString*) comboToken {
+	return [NSString stringWithFormat:@"%d.%d", (int)(intptr_t)[base cookie], index];
+}
+
 @end

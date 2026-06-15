@@ -28,4 +28,8 @@
 	active = IOHIDValueGetIntegerValue(value) == max;
 }
 
+// Combo member: held when pressed; its own object carries the target.
+-(BOOL) isHeld { return active; }
+-(NSArray*) suppressibleSubactions { return @[self]; }
+
 @end

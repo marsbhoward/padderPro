@@ -17,6 +17,10 @@
 #define kPPMouseBack    259
 #define kPPMouseForward 260
 
+// Currently-held modifier flags from synthesized modifier keys (Shift/Ctrl/Opt/Cmd/Fn).
+// Used so other synthesizers (e.g. mouse movement drags) carry held modifiers.
+CGEventFlags PPHeldModifierFlags(void);
+
 @interface TargetKeyboard : Target {
     NSArray  *vkCodes; // NSNumber(CGKeyCode) — one or more keys
     NSString *descr;

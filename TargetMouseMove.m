@@ -9,7 +9,7 @@
 
 -(BOOL) isContinuous { return YES; }
 
-@synthesize dir, speed;
+@synthesize dir, speed, leadDelay;
 
 -(id) init {
     if (self = [super init]) {
@@ -30,11 +30,23 @@
     return target;
 }
 
--(void) trigger:(JoystickController *)jc  { inputValue = 0.0; }
+-(void) trigger:(JoystickController *)jc  {
+    inputValue = 0.0;
+    activatedAt = CFAbsoluteTimeGetCurrent();
+}
 -(void) untrigger:(JoystickController *)jc { }
 
 -(void) update:(JoystickController *)jc {
     if (![self running]) return;
+
+    // When a concurrent key/button is mapped alongside this movement, hold off on
+    // moving for a brief lead-in so the key/button registers as "down" first.
+    // This makes held-button drags reliable (the button is down before the drag starts).
+    if (leadDelay) {
+        static const double kLeadSeconds = 0.05;
+        if (CFAbsoluteTimeGetCurrent() - activatedAt < kLeadSeconds)
+            return;
+    }
 
     NSRect screenRect = [[NSScreen mainScreen] frame];
     double height = screenRect.size.height;
@@ -65,6 +77,30 @@
     CGPoint cgPos = CGPointMake(mouseLoc->x, height - mouseLoc->y);
     CGWarpMouseCursorPosition(cgPos);
     CGAssociateMouseAndMouseCursorPosition(true);
+
+    // If a mouse button is currently held (e.g. via a concurrent "Also press key"
+    // mapped to a mouse button), emit the matching drag event so the held button
+    // drags along with the movement instead of staying put. A bare warp produces
+    // no events, so without this the held button never registers as a drag.
+    CGEventSourceStateID st = kCGEventSourceStateCombinedSessionState;
+    CGEventType dragType = 0;
+    CGMouseButton btn = kCGMouseButtonLeft;
+    if (CGEventSourceButtonState(st, kCGMouseButtonLeft)) {
+        dragType = kCGEventLeftMouseDragged;  btn = kCGMouseButtonLeft;
+    } else if (CGEventSourceButtonState(st, kCGMouseButtonRight)) {
+        dragType = kCGEventRightMouseDragged; btn = kCGMouseButtonRight;
+    } else if (CGEventSourceButtonState(st, kCGMouseButtonCenter)) {
+        dragType = kCGEventOtherMouseDragged; btn = kCGMouseButtonCenter;
+    }
+    if (dragType) {
+        CGEventRef drag = CGEventCreateMouseEvent(NULL, dragType, cgPos, btn);
+        // Preserve held modifiers (e.g. Shift) across drag events.
+        CGEventSetFlags(drag, PPHeldModifierFlags());
+        CGEventSetIntegerValueField(drag, kCGMouseEventDeltaX, (int64_t)dx);
+        CGEventSetIntegerValueField(drag, kCGMouseEventDeltaY, (int64_t)dy);
+        CGEventPost(kCGHIDEventTap, drag);
+        CFRelease(drag);
+    }
 }
 
 @end

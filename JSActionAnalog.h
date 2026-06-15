@@ -20,6 +20,7 @@
 @property(readwrite) double max;
 @property(readwrite) double discreteThreshold;
 @property(readwrite) double analogThreshold;
+@property(readonly) BOOL isTrigger;
 
 - (id) initWithIndex:(int)newIndex usage:(int)usage;
 - (id) initAsTriggerWithIndex:(int)newIndex;

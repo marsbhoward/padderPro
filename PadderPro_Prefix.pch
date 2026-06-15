@@ -17,6 +17,8 @@
 #import "JSActionAnalog.h"
 #import "JSActionStick.h"
 #import "JSActionButton.h"
+#import "JSActionCombo.h"
+#import "JSGroup.h"
 #import "JSActionHat.h"
 #import "KeyInputTextView.h"
 #import "SubAction.h"

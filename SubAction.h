@@ -23,4 +23,11 @@
 @property(readwrite) int index;
 @property(readwrite) BOOL active;
 
+-(NSString*) stringify;
+
+// Combo support (mirrors JSAction): a hat direction can be a combo member.
+-(BOOL) isHeld;
+-(NSArray*) suppressibleSubactions;
+-(NSString*) comboToken;
+
 @end

@@ -22,12 +22,20 @@
 @property(readonly) int index;
 @property(readonly) NSArray* subActions;
 @property(readwrite, retain) id base;
-@property(readonly) NSString* name;
+@property(readwrite, copy) NSString* name;
 @property(readonly) BOOL active;
 
 -(void) notifyEvent: (IOHIDValueRef) value;
 -(NSString*) stringify;
 -(NSArray*) subActions;
 -(id) findSubActionForValue: (IOHIDValueRef) value;
+
+// Combo support: whether this input is currently held, and which sub-actions
+// (the things that carry per-config targets) should be suppressed when a combo
+// containing this input is active.
+-(BOOL) isHeld;
+-(NSArray*) suppressibleSubactions;
+// Compact identifier for combo persistence (a button/trigger is just its cookie).
+-(NSString*) comboToken;
 
 @end
